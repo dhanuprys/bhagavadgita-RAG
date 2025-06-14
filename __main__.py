@@ -11,11 +11,11 @@ from app.infrastructure.cli_app import CLIApp
 def main():
     llm = LocalLLM('google/gemma-3-1b-it')
     app = CLIApp(
-        # THIS IS INSTANCE ONLY CAN USE ONE LLM INSTANCE DUE TO OOM
+        # ONLY CAN USE ONE LLM INSTANCE DUE TO Out-Of-Memory
         llm_collection=LLMCollection(
             general=llm,
             context_focused=llm,
-            paraphrase=llm
+            paraphrase=llm # LocalLLM('TinyLLM') x
         ),
         chapter_repository=JsonChapterRepository(),
         verse_repository=JsonVerseRepository(),
@@ -23,6 +23,7 @@ def main():
         chapter_searcher=ChapterSearcher(),
         verse_translation_searcher=VerseTranslationSearcher(),
         pattern_matching_services=[
+            # Still on development
             # Bab 1, Bab 2
             ChapterMatching()
         ]
