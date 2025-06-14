@@ -16,8 +16,6 @@ class LocalLLM(LLMAdapter):
     def generate(self, prompt: str, max_tokens=256):
         inputs = self.tokenizer(prompt, return_tensors="pt")
         outputs = self.model.generate(**inputs, max_new_tokens=max_tokens)
-        print("REAL ANSWER FROM LLM:")
-        print(self.tokenizer.decode(outputs[0], skip_special_tokens=True))
         return self.__clean_response(
             self.tokenizer.decode(outputs[0], skip_special_tokens=True).replace(prompt, "")
         )
