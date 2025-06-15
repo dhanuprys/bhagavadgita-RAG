@@ -1,15 +1,16 @@
 from typing import List
-from app.domain.entity.verse_translation_entity import VerseTranslationEntity
+
 from app.domain.entity.chapter_entity import ChapterEntity
+from app.domain.entity.verse_translation_entity import VerseTranslationEntity
+
 
 def build_for_verse_translations(
-    verse_translations: List[VerseTranslationEntity],
-    question: str
+    verse_translations: List[VerseTranslationEntity], question: str
 ):
-    context = "\n".join([
-        f"Sloka {v.verse_id} mengatakan {v.content}\n" for v in verse_translations
-    ])
-    
+    context = "\n".join(
+        [f"Sloka {v.verse_id} mengatakan {v.content}\n" for v in verse_translations]
+    )
+
     return f"""
 Kamu adalah asisten spiritual yang membantu menjelaskan isi Bhagavad Gita.
 
@@ -29,14 +30,15 @@ Pertanyaan:
 Jawaban:
 """
 
-def build_for_chapters(
-    chapters: List[ChapterEntity],
-    question: str
-):
-    context = "\n".join([
-        f"BAB {v.chapter_number} - Nama BAB {v.name} - Ringkasan {v.summary}\"" for v in chapters
-    ])
-    
+
+def build_for_chapters(chapters: List[ChapterEntity], question: str):
+    context = "\n".join(
+        [
+            f'BAB {v.chapter_number} - Nama BAB {v.name} - Ringkasan {v.summary}"'
+            for v in chapters
+        ]
+    )
+
     return f"""
 Kamu adalah asisten spiritual yang membantu menjelaskan isi Bhagavad Gita.
 

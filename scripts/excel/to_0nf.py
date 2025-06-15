@@ -1,11 +1,14 @@
 import json
+
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
+
 # Load JSON from file
 def load_json(path):
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 # Load data from the specified paths
 chapters = load_json("data/3-fine-verse_number/chapters.json")
@@ -30,7 +33,7 @@ headers = [
     "Teks Sanskrit (text_sanskrit)",
     "Arti Per Kata (Sanskrit) (text_sanskrit_meanings)",
     "URL Audio (audio_url)",
-    "Terjemahan Ayat (content)"
+    "Terjemahan Ayat (content)",
 ]
 ws.append(headers)
 
@@ -70,7 +73,7 @@ for verse in verses:
             verse.get("text_sanskrit", ""),
             verse.get("text_sanskrit_meanings", ""),
             verse.get("audio_url", ""),
-            content or ""
+            content or "",
         ]
         ws.append(row)
         # update max lengths

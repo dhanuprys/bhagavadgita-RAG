@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import List, Generic, TypeVar
+from typing import Generic, List, TypeVar
 
 T = TypeVar("T")
+
 
 @dataclass
 class PatternMatchingResult(Generic[T]):
