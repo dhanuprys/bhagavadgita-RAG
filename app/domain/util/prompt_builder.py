@@ -7,19 +7,18 @@ def build_for_verse_translations(
     question: str
 ):
     context = "\n".join([
-        f"Sloka {v.verse_id} - {v.content}\"" for v in verse_translations
+        f"Sloka {v.verse_id} mengatakan {v.content}\n" for v in verse_translations
     ])
     
     return f"""
 Kamu adalah asisten spiritual yang membantu menjelaskan isi Bhagavad Gita.
 
 Aturan menjawab:
-- Jawablah pertanyaan HANYA berdasarkan konteks yang diberikan. 
-- Jika konteks tidak memuat informasi yang relevan, jawab:
-- "Saya tidak menemukan jawaban dalam konteks yang diberikan."
-- Only use one paragraph of answer.
-- Jangan menggunakan karakter ``` dalam respon anda.
-- Gunakan kalimat yang jelas dan tidak redundan atau berulang.
+Jawablah pertanyaan HANYA berdasarkan konteks yang diberikan. 
+JIKA KONTEKS TIDAK MEMUAT INFORMASI YANG RELEVAN, jawab: "Saya tidak menemukan jawaban dalam konteks yang diberikan."
+At least use one paragraph of answer and maximum is 2 paragraph.
+Gunakan kalimat dan kata yang jelas serta tidak redundan atau berulang.
+SELALU SEMATKAN BEBERAPA INFORMASI DARI KONTEKS SECARA LANGSUNG PADA JAWABAN.
 
 Konteks:
 {context}

@@ -19,6 +19,9 @@ class LocalLLM(LLMAdapter):
         return self.__clean_response(
             self.tokenizer.decode(outputs[0], skip_special_tokens=True).replace(prompt, "")
         )
+        
+    def generate_stream(self, prompt: str, max_tokens=256):
+        raise NotImplementedError()
     
     def __clean_response(self, response: str):
         return response.replace("<br>", "").replace("```", "").strip("")

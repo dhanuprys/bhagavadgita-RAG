@@ -9,6 +9,7 @@ from app.domain.entity.verse_translation_entity import VerseTranslationEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 from typing import List
 from abc import ABC, abstractmethod
+from rich.console import Console # harmfull
 
 class ApplicationConstruct(ABC):
     def __init__(
@@ -21,6 +22,7 @@ class ApplicationConstruct(ABC):
         verse_translation_searcher: Searcher,
         pattern_matching_services: List[PatternMatching]
     ):
+        self.console = Console()
         self.llm_collection = llm_collection
         self.chapter_repository = chapter_repository
         self.verse_repository = verse_repository
@@ -31,16 +33,17 @@ class ApplicationConstruct(ABC):
         
     def prepare_model(self):
         # Load chapter model
-        print("Loading chapter model")
+        self.console.print('[blue][INFO][/blue] Memuat model [b]chapter[/b]...')
         if self.chapter_searcher.builded():
             self.chapter_searcher.load_index()
         else:
             self.chapter_searcher.build_index(
                 self.chapter_repository.get_all()
             )
+        # self.console.print('Chapter searcher loaded!', style='bold green')
             
         # Load verse translation model
-        print("Loading verse translation model")
+        self.console.print('[blue][INFO][/blue] Memuat model [b]verse translation[/b]...')
         if self.verse_translation_searcher.builded():
             self.verse_translation_searcher.load_index()
         else:
@@ -62,10 +65,10 @@ class ApplicationConstruct(ABC):
             
         if not results:
             if 'bab' in user_input.lower():
-                print("Using chapter searcher!")
+                self.console.print('[yellow][AI][/yellow] Menggunakan model [b]chapter translation[/b]...')
                 results = self.chapter_searcher.search(user_input)
             else:
-                print("Using verse searcher")
+                self.console.print('[yellow][AI][/yellow] Menggunakan model [b]verse translation[/b]...')
                 results = self.verse_translation_searcher.search(user_input)
     
         return results

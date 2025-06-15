@@ -6,7 +6,7 @@ import faiss
 import pickle
 import os
 
-class VerseTranslationSearcher:
+class VerseTranslationSearcher(Searcher):
     def __init__(self):
         self.path_prefix = 'data/model/'
         self.model = SentenceTransformer("intfloat/multilingual-e5-base")

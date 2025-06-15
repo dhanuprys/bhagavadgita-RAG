@@ -3,9 +3,14 @@ from app.domain.value_object.pattern_matching_result import PatternMatchingResul
 from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.entity.verse_translation_entity import VerseTranslationEntity
 import app.domain.util.prompt_builder as prompt_builder
+from rich import pretty
+from rich.console import Console
 
 class CLIApp(ApplicationConstruct):
     def run(self):
+        pretty.install()
+        self.console = Console()
+        
         self.prepare_model()
         self.run_loop()
         
@@ -33,9 +38,16 @@ class CLIApp(ApplicationConstruct):
                         user_input
                     )
                 
-                response = self.llm_collection.general.generate(prompt, 256)
-                print("\n🧠 Jawaban:\n", response)
+                self.console.print(f"[yellow][AI][/yellow] AI menemukan {len(results)} konteks terkait")
+                
+                self.console.print("[yellow][AI][/yellow] AI sedang merangkai kalimat yang sesuai")
+                response = self.llm_collection.general.generate_stream(prompt, 256)
+                print()
+                self.console.print('🚀 Jawaban berdasarkan konteks:')
+                for chunk in response:
+                    print(chunk.content_chunk, end="", flush=True)
+                print("\n")
             
     def retrieve_user_input(self):
-        return input("Masukkan prompt: ")
+        return input(">> ")
         

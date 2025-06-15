@@ -1,4 +1,4 @@
-from app.infrastructure.llm.local_llm import LocalLLM
+from app.infrastructure.llm.ollama_llm import OllamaLLM
 from app.infrastructure.repository.json_chapter_repository import JsonChapterRepository
 from app.infrastructure.repository.json_verse_repository import JsonVerseRepository
 from app.infrastructure.repository.json_verse_translation_repository import JsonVerseTranslationRepository
@@ -9,7 +9,7 @@ from app.infrastructure.matcher.chapter_matching import ChapterMatching
 from app.infrastructure.cli_app import CLIApp
 
 def main():
-    llm = LocalLLM('google/gemma-3-1b-it')
+    llm = OllamaLLM('deepseek-r1:7b')
     app = CLIApp(
         # ONLY CAN USE ONE LLM INSTANCE DUE TO Out-Of-Memory
         llm_collection=LLMCollection(
@@ -28,7 +28,6 @@ def main():
             ChapterMatching()
         ]
     )
-    print("Starting app")
     app.run()
     
 if __name__ == "__main__":
