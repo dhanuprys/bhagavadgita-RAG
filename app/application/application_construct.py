@@ -5,14 +5,14 @@ from rich.console import Console  # harmfull
 
 from app.application.repository.chapter_repository import ChapterRepository
 from app.application.repository.verse_repository import VerseRepository
-from app.application.repository.verse_translation_repository import (
-    VerseTranslationRepository,
+from app.application.repository.gita_repository import (
+    GitaRepository,
 )
 from app.application.service.llm_adapter import LLMCollection
 from app.application.service.pattern_matching import PatternMatching
 from app.application.service.searcher import Searcher
 from app.domain.entity.chapter_entity import ChapterEntity
-from app.domain.entity.verse_translation_entity import VerseTranslationEntity
+from app.domain.entity.gita_entity import GitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 
 
@@ -22,18 +22,18 @@ class ApplicationConstruct(ABC):
         llm_collection: LLMCollection,
         chapter_repository: ChapterRepository,
         verse_repository: VerseRepository,
-        verse_translation_repository: VerseTranslationRepository,
+        gita_repository: GitaRepository,
         chapter_searcher: Searcher,
-        verse_translation_searcher: Searcher,
+        gita_searcher: Searcher,
         pattern_matching_services: List[PatternMatching],
     ):
         self.console = Console()
         self.llm_collection = llm_collection
         self.chapter_repository = chapter_repository
         self.verse_repository = verse_repository
-        self.verse_translation_repository = verse_translation_repository
+        self.gita_repository = gita_repository
         self.chapter_searcher = chapter_searcher
-        self.verse_translation_searcher = verse_translation_searcher
+        self.gita_searcher = gita_searcher
         self.pattern_matching_services = pattern_matching_services
 
     def prepare_model(self):
@@ -49,21 +49,14 @@ class ApplicationConstruct(ABC):
         self.console.print(
             "[blue][INFO][/blue] Memuat model [b]verse translation[/b]..."
         )
-        if self.verse_translation_searcher.builded():
-            self.verse_translation_searcher.load_index()
+        if self.gita_searcher.builded():
+            self.gita_searcher.load_index()
         else:
-            self.verse_translation_searcher.build_index(
-                self.verse_translation_repository.get_all()
-            )
+            self.gita_searcher.build_index(self.gita_repository.get_all())
 
     def get_context(
         self, user_input: str
-    ) -> (
-        List[ChapterEntity]
-        | List[VerseTranslationEntity]
-        | PatternMatchingResult
-        | None
-    ):
+    ) -> List[ChapterEntity] | List[GitaEntity] | PatternMatchingResult | None:
         results = None
         for pattern_matching_service in self.pattern_matching_services:
             matching_result = pattern_matching_service.match(user_input)
@@ -83,7 +76,7 @@ class ApplicationConstruct(ABC):
                 self.console.print(
                     "[yellow][AI][/yellow] Menggunakan model [b]verse translation[/b]..."
                 )
-                results = self.verse_translation_searcher.search(user_input)
+                results = self.gita_searcher.search(user_input)
 
         return results
 

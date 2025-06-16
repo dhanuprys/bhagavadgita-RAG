@@ -25,7 +25,10 @@ class OllamaLLM(LLMAdapter):
     def generate_stream(self, prompt: str, max_tokens=256):
         result: ollama.ChatResponse = ollama.chat(
             model=self.model_id,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": "Jawab pertanyaan yang diberikan"},
+            ],
             stream=True,
             think=False,
             # max_tokens=max_tokens

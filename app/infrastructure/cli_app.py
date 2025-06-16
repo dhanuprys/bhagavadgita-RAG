@@ -4,7 +4,7 @@ from rich.console import Console
 import app.domain.util.prompt_builder as prompt_builder
 from app.application.application_construct import ApplicationConstruct
 from app.domain.entity.chapter_entity import ChapterEntity
-from app.domain.entity.verse_translation_entity import VerseTranslationEntity
+from app.domain.entity.gita_entity import GitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 
 
@@ -28,17 +28,24 @@ class CLIApp(ApplicationConstruct):
             if isinstance(results, PatternMatchingResult):
                 print(results.output)
             else:
-                prompt = None
-                if isinstance(results[0], ChapterEntity):
-                    prompt = prompt_builder.build_for_chapters(results, user_input)
-                elif isinstance(results[0], VerseTranslationEntity):
-                    prompt = prompt_builder.build_for_verse_translations(
-                        results, user_input
-                    )
-
                 self.console.print(
                     f"[yellow][AI][/yellow] AI menemukan {len(results)} konteks terkait"
                 )
+
+                prompt = None
+                if isinstance(results[0], ChapterEntity):
+                    prompt = prompt_builder.build_for_chapters(results, user_input)
+                elif isinstance(results[0], GitaEntity):
+                    prompt = prompt_builder.build_for_gita(results, user_input)
+                    i = 1
+                    for ctx in results:
+                        self.console.print(
+                            f"[yellow][AI][/yellow][ctx] {i}. [b]Bab {ctx.c_chapter_number} sloka {ctx.v_verse_number}[/b]"
+                        )
+                        self.console.print(
+                            f"[yellow][AI][/yellow][ctx]    {ctx.vt_content[:50]}..."
+                        )
+                        i += 1
 
                 self.console.print(
                     "[yellow][AI][/yellow] AI sedang merangkai kalimat yang sesuai"

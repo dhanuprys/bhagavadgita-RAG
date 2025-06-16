@@ -4,12 +4,12 @@ from app.infrastructure.llm.ollama_llm import OllamaLLM
 from app.infrastructure.matcher.chapter_matching import ChapterMatching
 from app.infrastructure.repository.json_chapter_repository import JsonChapterRepository
 from app.infrastructure.repository.json_verse_repository import JsonVerseRepository
-from app.infrastructure.repository.json_verse_translation_repository import (
-    JsonVerseTranslationRepository,
+from app.infrastructure.repository.mysql_gita_repository import (
+    MysqlGitaRepository,
 )
 from app.infrastructure.searcher.chapter_searcher import ChapterSearcher
-from app.infrastructure.searcher.verse_translation_searcher import (
-    VerseTranslationSearcher,
+from app.infrastructure.searcher.gita_searcher import (
+    GitaSearcher,
 )
 
 
@@ -22,9 +22,9 @@ def main():
         ),
         chapter_repository=JsonChapterRepository(),
         verse_repository=JsonVerseRepository(),
-        verse_translation_repository=JsonVerseTranslationRepository(),
+        gita_repository=MysqlGitaRepository(),
         chapter_searcher=ChapterSearcher(),
-        verse_translation_searcher=VerseTranslationSearcher(),
+        gita_searcher=GitaSearcher(),
         pattern_matching_services=[
             # Still on development
             # Bab 1, Bab 2

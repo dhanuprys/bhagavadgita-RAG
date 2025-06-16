@@ -1,14 +1,15 @@
 from typing import List
 
 from app.domain.entity.chapter_entity import ChapterEntity
-from app.domain.entity.verse_translation_entity import VerseTranslationEntity
+from app.domain.entity.gita_entity import GitaEntity
 
 
-def build_for_verse_translations(
-    verse_translations: List[VerseTranslationEntity], question: str
-):
+def build_for_gita(verse_translations: List[GitaEntity], question: str):
     context = "\n".join(
-        [f"Sloka {v.verse_id} mengatakan {v.content}\n" for v in verse_translations]
+        [
+            f"Bab {v.c_chapter_number} - Nama Bab {v.c_name} - Sloka {v.v_verse_number} mengatakan {v.vt_content}\n"
+            for v in verse_translations
+        ]
     )
 
     return f"""
