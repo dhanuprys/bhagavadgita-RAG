@@ -1,0 +1,7 @@
+transformers
+openpyxl
+ollama
+torch
+faiss
+sentence-transformers
+rich
