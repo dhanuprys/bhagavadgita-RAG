@@ -15,50 +15,62 @@ from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.entity.gita_entity import GitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 
+from dataclasses import dataclass
+
+
+@dataclass
+class ApplicationContainer:
+    llm_collection: LLMCollection
+    chapter_repository: ChapterRepository
+    verse_repository: VerseRepository
+    gita_repository: GitaRepository
+    chapter_searcher: Searcher
+    gita_searcher: Searcher
+    pattern_matching_services: List[PatternMatching]
+
 
 class ApplicationConstruct(ABC):
     def __init__(
         self,
-        llm_collection: LLMCollection,
-        chapter_repository: ChapterRepository,
-        verse_repository: VerseRepository,
-        gita_repository: GitaRepository,
-        chapter_searcher: Searcher,
-        gita_searcher: Searcher,
-        pattern_matching_services: List[PatternMatching],
+        app: ApplicationContainer,
     ):
         self.console = Console()
-        self.llm_collection = llm_collection
-        self.chapter_repository = chapter_repository
-        self.verse_repository = verse_repository
-        self.gita_repository = gita_repository
-        self.chapter_searcher = chapter_searcher
-        self.gita_searcher = gita_searcher
-        self.pattern_matching_services = pattern_matching_services
+        self.app: ApplicationContainer = app
 
     def prepare_model(self):
+        self.app.llm_collection.general.setup("general")
+        self.app.llm_collection.context_focused.setup("context_focused")
+        self.app.llm_collection.paraphrase.setup("paraphrase")
+
         # Load chapter model
         self.console.print("[blue][INFO][/blue] Memuat model [b]chapter[/b]...")
-        if self.chapter_searcher.builded():
-            self.chapter_searcher.load_index()
+        chapters = self.app.chapter_repository.get_all()
+        if self.app.chapter_searcher.builded():
+            self.app.chapter_searcher.load_index()
         else:
-            self.chapter_searcher.build_index(self.chapter_repository.get_all())
-        # self.console.print('Chapter searcher loaded!', style='bold green')
+            self.app.chapter_searcher.build_index(chapters)
+        self.console.print(
+            f"[blue][INFO][/blue] Berhasil memuat {len(chapters)} baris data."
+        )
 
         # Load verse translation model
         self.console.print(
             "[blue][INFO][/blue] Memuat model [b]verse translation[/b]..."
         )
-        if self.gita_searcher.builded():
-            self.gita_searcher.load_index()
+        complete_gita = self.app.gita_repository.get_all()
+        if self.app.gita_searcher.builded():
+            self.app.gita_searcher.load_index()
         else:
-            self.gita_searcher.build_index(self.gita_repository.get_all())
+            self.app.gita_searcher.build_index(complete_gita)
+        self.console.print(
+            f"[blue][INFO][/blue] Berhasil memuat {len(complete_gita)} baris data."
+        )
 
     def get_context(
         self, user_input: str
     ) -> List[ChapterEntity] | List[GitaEntity] | PatternMatchingResult | None:
         results = None
-        for pattern_matching_service in self.pattern_matching_services:
+        for pattern_matching_service in self.app.pattern_matching_services:
             matching_result = pattern_matching_service.match(user_input)
             if matching_result:
                 results = pattern_matching_service.handle(
@@ -71,12 +83,12 @@ class ApplicationConstruct(ABC):
                 self.console.print(
                     "[yellow][AI][/yellow] Menggunakan model [b]chapter translation[/b]..."
                 )
-                results = self.chapter_searcher.search(user_input)
+                results = self.app.chapter_searcher.search(user_input)
             else:
                 self.console.print(
                     "[yellow][AI][/yellow] Menggunakan model [b]verse translation[/b]..."
                 )
-                results = self.gita_searcher.search(user_input)
+                results = self.app.gita_searcher.search(user_input)
 
         return results
 

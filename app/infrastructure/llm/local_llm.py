@@ -16,13 +16,24 @@ class LocalLLM(LLMAdapter):
             "mistralai/Mistral-7B-Instruct-v0.1",
         ],
     ):
-        print("Loading", model_id)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_id,
-            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-        )
-        self.model.eval()
+        self.model_id = model_id
+        self.tokenizer = None
+        self.model = None
+
+    def setup(self, type: str):
+        print("Loading", self.model_id, type)
+
+        if not self.tokenizer:
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_id)
+
+        if not self.model:
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.model_id,
+                torch_dtype=(
+                    torch.float16 if torch.cuda.is_available() else torch.float32
+                ),
+            )
+            self.model.eval()
 
     def generate(self, prompt: str, max_tokens=256):
         inputs = self.tokenizer(prompt, return_tensors="pt")

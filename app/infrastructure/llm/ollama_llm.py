@@ -12,7 +12,10 @@ class OllamaLLM(LLMAdapter):
         self.console = Console()
         self.model_id = model_id
 
-        self.console.print(f"[blue][INFO][/blue] Menggunakan model [b]{model_id}[/b]")
+    def setup(self, type: str):
+        self.console.print(
+            f"[blue][INFO][/blue] Menggunakan model [b]{self.model_id}[/b] for {type}"
+        )
 
     def generate(self, prompt: str, max_tokens=256):
         result = ollama.chat(

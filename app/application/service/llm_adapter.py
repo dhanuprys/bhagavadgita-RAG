@@ -7,6 +7,10 @@ from app.domain.value_object.llm_stream import LLMStream
 
 class LLMAdapter(ABC):
     @abstractmethod
+    def setup(type: str):
+        pass
+
+    @abstractmethod
     def generate(self, prompt: str, max_tokens: int) -> str:
         pass
 

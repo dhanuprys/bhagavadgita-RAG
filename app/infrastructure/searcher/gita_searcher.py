@@ -43,4 +43,14 @@ class GitaSearcher(Searcher):
         query = f"query: {query}"
         q_emb = self.model.encode([query])
         D, I = self.index.search(q_emb, top_k)
-        return [self.verse_meta[i] for i in I[0]]
+
+        seen_id = []
+        output = []
+        for i in I[0]:
+            meta = self.verse_meta[i]
+            meta_key = f"{meta.c_chapter_number}-{meta.v_verse_number}"
+            if meta_key not in seen_id:
+                seen_id.append(meta_key)
+                output.append(self.verse_meta[i])
+
+        return output

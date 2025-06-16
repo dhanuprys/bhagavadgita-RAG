@@ -1,5 +1,6 @@
 from rich import pretty
 from rich.console import Console
+from time import sleep
 
 import app.domain.util.prompt_builder as prompt_builder
 from app.application.application_construct import ApplicationConstruct
@@ -46,11 +47,12 @@ class CLIApp(ApplicationConstruct):
                             f"[yellow][AI][/yellow][ctx]    {ctx.vt_content[:50]}..."
                         )
                         i += 1
+                        sleep(0.5)
 
                 self.console.print(
                     "[yellow][AI][/yellow] AI sedang merangkai kalimat yang sesuai"
                 )
-                response = self.llm_collection.general.generate_stream(prompt, 256)
+                response = self.app.llm_collection.general.generate_stream(prompt, 256)
                 print()
                 self.console.print("🚀 Jawaban berdasarkan konteks:")
                 for chunk in response:

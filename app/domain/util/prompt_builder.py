@@ -22,8 +22,9 @@ At least use one paragraph of answer and maximum is 2 paragraph.
 Gunakan kalimat dan kata yang jelas serta tidak redundan atau berulang.
 SELALU SEMATKAN BEBERAPA INFORMASI DARI KONTEKS SECARA LANGSUNG PADA JAWABAN.
 
-Konteks:
+[CONTEXT]
 {context}
+[/CONTEXT]
 
 Pertanyaan:
 {question}

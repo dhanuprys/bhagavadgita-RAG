@@ -1,6 +1,8 @@
 from app.application.service.llm_adapter import LLMCollection
+from app.application.application_construct import ApplicationContainer
 from app.infrastructure.cli_app import CLIApp
 from app.infrastructure.llm.ollama_llm import OllamaLLM
+from app.infrastructure.llm.gemini_llm import GeminiLLM
 from app.infrastructure.matcher.chapter_matching import ChapterMatching
 from app.infrastructure.repository.json_chapter_repository import JsonChapterRepository
 from app.infrastructure.repository.json_verse_repository import JsonVerseRepository
@@ -14,8 +16,9 @@ from app.infrastructure.searcher.gita_searcher import (
 
 
 def main():
-    llm = OllamaLLM("deepseek-r1:7b")
-    app = CLIApp(
+    # JUST TAKE IT IF YOU WANT TO DO!!
+    llm = GeminiLLM("gemini-2.0-flash", "AIzaSyCozswOipLBUxT2rUlRrMVvgAgrTmEZaOg")
+    app_container = ApplicationContainer(
         # ONLY CAN USE ONE LLM INSTANCE DUE TO Out-Of-Memory
         llm_collection=LLMCollection(
             general=llm, context_focused=llm, paraphrase=llm  # LocalLLM('TinyLLM') x
@@ -31,6 +34,7 @@ def main():
             ChapterMatching()
         ],
     )
+    app = CLIApp(app=app_container)
     app.run()
 
 
