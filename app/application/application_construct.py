@@ -11,6 +11,7 @@ from app.application.repository.gita_repository import (
 from app.application.service.llm_adapter import LLMCollection
 from app.application.service.pattern_matching import PatternMatching
 from app.application.service.searcher import Searcher
+from app.application.service.prompt_builder import PromptBuilder
 from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.entity.gita_entity import GitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
@@ -26,6 +27,7 @@ class ApplicationContainer:
     gita_repository: GitaRepository
     chapter_searcher: Searcher
     gita_searcher: Searcher
+    prompt_builder: PromptBuilder
     pattern_matching_services: List[PatternMatching]
 
 
@@ -74,7 +76,7 @@ class ApplicationConstruct(ABC):
             matching_result = pattern_matching_service.match(user_input)
             if matching_result:
                 results = pattern_matching_service.handle(
-                    self.llm_collection.general, user_input, matching_result
+                    self.app.llm_collection, user_input, matching_result
                 )
                 break
 

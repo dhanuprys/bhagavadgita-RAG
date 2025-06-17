@@ -22,17 +22,20 @@ class GitaSearcher(Searcher):
         )
 
     def build_index(self, gita: List[GitaEntity]):
-        print(gita)
-        texts = [f"passage: {v.vt_content}" for v in gita]
+        texts = [
+            f"passage: Bab {v.c_chapter_number} sloka {v.v_verse_number} mengatakan {v.vt_content}"
+            for v in gita
+        ]
+        mixed_chunks, mixed_objects = self.chunk_verses(gita)
+        texts += mixed_chunks
         embeddings = self.model.encode(texts, convert_to_numpy=True)
-
         self.index = faiss.IndexFlatL2(embeddings.shape[1])
         self.index.add(embeddings)
-        self.verse_meta = gita
+        self.verse_meta = gita + mixed_objects
 
         faiss.write_index(self.index, self.path_prefix + "gita.index")
         with open(self.path_prefix + "gita_meta.pkl", "wb") as f:
-            pickle.dump(gita, f)
+            pickle.dump(self.verse_meta, f)
 
     def load_index(self):
         self.index = faiss.read_index(self.path_prefix + "gita.index")
@@ -44,6 +47,9 @@ class GitaSearcher(Searcher):
         q_emb = self.model.encode([query])
         D, I = self.index.search(q_emb, top_k)
 
+        if D[0][0] > 0.44:
+            return []
+
         seen_id = []
         output = []
         for i in I[0]:
@@ -54,3 +60,18 @@ class GitaSearcher(Searcher):
                 output.append(self.verse_meta[i])
 
         return output
+
+    def chunk_verses(self, gita: List[GitaEntity], size: int = 3) -> List[GitaEntity]:
+        chunks = []
+        objects = []
+        for i in range(0, len(gita), size):
+            group = gita[i : i + size]
+            text = " ".join(
+                [
+                    f"BG {v.c_chapter_number}.{v.v_verse_number} - {v.vt_content}"
+                    for v in group
+                ]
+            )
+            chunks.append("passage: " + text)
+            objects.append(group[0])
+        return chunks, objects

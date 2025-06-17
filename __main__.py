@@ -3,6 +3,7 @@ from app.application.application_construct import ApplicationContainer
 from app.infrastructure.cli_app import CLIApp
 from app.infrastructure.llm.ollama_llm import OllamaLLM
 from app.infrastructure.llm.gemini_llm import GeminiLLM
+from app.infrastructure.prompt.gemini_prompt import GeminiPrompt
 from app.infrastructure.matcher.chapter_matching import ChapterMatching
 from app.infrastructure.repository.json_chapter_repository import JsonChapterRepository
 from app.infrastructure.repository.json_verse_repository import JsonVerseRepository
@@ -28,6 +29,7 @@ def main():
         gita_repository=MysqlGitaRepository(),
         chapter_searcher=ChapterSearcher(),
         gita_searcher=GitaSearcher(),
+        prompt_builder=GeminiPrompt(),
         pattern_matching_services=[
             # Still on development
             # Bab 1, Bab 2

@@ -2,7 +2,6 @@ from rich import pretty
 from rich.console import Console
 from time import sleep
 
-import app.domain.util.prompt_builder as prompt_builder
 from app.application.application_construct import ApplicationConstruct
 from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.entity.gita_entity import GitaEntity
@@ -35,9 +34,13 @@ class CLIApp(ApplicationConstruct):
 
                 prompt = None
                 if isinstance(results[0], ChapterEntity):
-                    prompt = prompt_builder.build_for_chapters(results, user_input)
+                    prompt = self.app.prompt_builder.generate_chapter_prompt(
+                        user_input, results
+                    )
                 elif isinstance(results[0], GitaEntity):
-                    prompt = prompt_builder.build_for_gita(results, user_input)
+                    prompt = self.app.prompt_builder.generate_global_gita_prompt(
+                        user_input, results
+                    )
                     i = 1
                     for ctx in results:
                         self.console.print(
