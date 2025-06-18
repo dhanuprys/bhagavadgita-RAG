@@ -1,6 +1,6 @@
 from app.application.service.llm_adapter import LLMCollection
 from app.application.application_construct import ApplicationContainer
-from app.infrastructure.http.app import HttpApp
+from app.infrastructure.cli_app import CLIApp
 from app.infrastructure.llm.ollama_llm import OllamaLLM
 from app.infrastructure.llm.gemini_llm import GeminiLLM
 from app.infrastructure.prompt.gemini_prompt import GeminiPrompt
@@ -36,7 +36,7 @@ def main():
             ChapterMatching()
         ],
     )
-    app = HttpApp(app=app_container)
+    app = CLIApp(app=app_container)
     app.run()
 
 

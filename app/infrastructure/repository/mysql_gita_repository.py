@@ -16,6 +16,7 @@ class MysqlGitaRepository(GitaRepository):
               vt.id AS `vt_id`,
               vt.content AS `vt_content`,
               v.id AS `v_id`,
+              v.text_sanskrit AS `v_text_sanskrit`,
               v.text_sanskrit_meanings AS `v_text_sanskrit_meanings`,
               v.verse_number AS `v_verse_number`,
               c.id AS `c_id`,

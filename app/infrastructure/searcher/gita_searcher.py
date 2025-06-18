@@ -1,12 +1,12 @@
 import os
 import pickle
-from typing import List
+from typing import List, Literal
 
 import faiss
 from sentence_transformers import SentenceTransformer
 
 from app.application.service.searcher import Searcher
-from app.domain.entity.gita_entity import GitaEntity
+from app.domain.entity.gita_entity import GitaEntity, MixedGitaEntity
 
 
 class GitaSearcher(Searcher):
@@ -42,7 +42,7 @@ class GitaSearcher(Searcher):
         with open(self.path_prefix + "gita_meta.pkl", "rb") as f:
             self.verse_meta = pickle.load(f)
 
-    def search(self, query: str, top_k=3) -> List[GitaEntity]:
+    def search(self, query: str, top_k=3) -> List[GitaEntity | MixedGitaEntity]:
         query = f"query: {query}"
         q_emb = self.model.encode([query])
         D, I = self.index.search(q_emb, top_k)
@@ -54,24 +54,36 @@ class GitaSearcher(Searcher):
         output = []
         for i in I[0]:
             meta = self.verse_meta[i]
-            meta_key = f"{meta.c_chapter_number}-{meta.v_verse_number}"
+            meta_key = ""
+            if isinstance(meta, MixedGitaEntity):
+                meta_key = meta.label
+            else:
+                meta_key = f"{meta.c_chapter_number}-{meta.v_verse_number}"
+
             if meta_key not in seen_id:
                 seen_id.append(meta_key)
                 output.append(self.verse_meta[i])
 
         return output
 
-    def chunk_verses(self, gita: List[GitaEntity], size: int = 3) -> List[GitaEntity]:
+    def chunk_verses(
+        self, gita: List[GitaEntity], size: int = 3
+    ) -> List[MixedGitaEntity]:
         chunks = []
         objects = []
         for i in range(0, len(gita), size):
             group = gita[i : i + size]
-            text = " ".join(
+            text = "; ".join(
                 [
                     f"BG {v.c_chapter_number}.{v.v_verse_number} - {v.vt_content}"
                     for v in group
                 ]
             )
             chunks.append("passage: " + text)
-            objects.append(group[0])
+            objects.append(
+                MixedGitaEntity(
+                    label="-".join("BG{v.c_chapter_number}.{v.v_verse_number}"),
+                    gita=group,
+                )
+            )
         return chunks, objects

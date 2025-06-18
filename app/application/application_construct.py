@@ -13,7 +13,7 @@ from app.application.service.pattern_matching import PatternMatching
 from app.application.service.searcher import Searcher
 from app.application.service.prompt_builder import PromptBuilder
 from app.domain.entity.chapter_entity import ChapterEntity
-from app.domain.entity.gita_entity import GitaEntity
+from app.domain.entity.gita_entity import GitaEntity, MixedGitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 
 from dataclasses import dataclass
@@ -70,7 +70,12 @@ class ApplicationConstruct(ABC):
 
     def get_context(
         self, user_input: str
-    ) -> List[ChapterEntity] | List[GitaEntity] | PatternMatchingResult | None:
+    ) -> (
+        List[ChapterEntity]
+        | List[GitaEntity | MixedGitaEntity]
+        | PatternMatchingResult
+        | None
+    ):
         results = None
         for pattern_matching_service in self.app.pattern_matching_services:
             matching_result = pattern_matching_service.match(user_input)
