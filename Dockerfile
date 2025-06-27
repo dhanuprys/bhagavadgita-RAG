@@ -53,4 +53,4 @@ ENV PYTHONUNBUFFERED=1 \
 USER appuser
 
 # Run your main script directly
-ENTRYPOINT ["python", "/__main__.py"]
+ENTRYPOINT ["python", "__main__.py"]

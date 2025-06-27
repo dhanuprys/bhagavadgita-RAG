@@ -50,10 +50,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /opt/app/stemsi/stemsiweb
+            cd /opt/app/dedan/gita
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GHCR_PAT }}
             docker compose pull
-            docker compose up backend --force-recreate -d
+            docker compose up --force-recreate -d
 
       - name: Get latest commit message
         id: commit_message
