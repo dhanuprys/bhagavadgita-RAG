@@ -34,6 +34,8 @@ RUN pip install --no-index --find-links=/wheels -r requirements.txt && rm -rf /w
 # Copy application code
 COPY . .
 
+RUN mkdir -p /home/appuser/data/model && chown -R appuser:appuser /home/appuser/data
+
 # Use non-root user
 USER appuser
 
