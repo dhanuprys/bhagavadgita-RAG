@@ -10,5 +10,9 @@ class ChapterRepository(ABC):
         pass
 
     @abstractmethod
+    def get_chapter_by_number(self, chapter_number: int) -> ChapterEntity | None:
+        pass
+
+    @abstractmethod
     def get_chapter_by_id(self, chapter_id: int) -> ChapterEntity | None:
         pass

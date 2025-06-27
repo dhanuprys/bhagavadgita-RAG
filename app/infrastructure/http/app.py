@@ -9,6 +9,8 @@ from app.domain.entity.gita_entity import GitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 from app.infrastructure.http.controller.controller import Controller
 from app.infrastructure.http.controller.prompt_controller import PromptController
+from app.infrastructure.http.controller.chapter_controller import ChapterController
+from app.infrastructure.http.controller.verse_controller import VerseController
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -32,11 +34,15 @@ class HttpApp(ApplicationConstruct):
             allow_methods=["*"],
             allow_headers=["*"],
         )
-        controllers: List[Controller] = [PromptController()]
+        controllers: List[Controller] = [
+            ChapterController(),
+            PromptController(),
+            VerseController(),
+        ]
 
         for c in controllers:
             c.set_app(self, self.app)
-            self.http.include_router(c.get_router())
+            self.http.include_router(c.router)
 
     def start_server(self):
         import uvicorn

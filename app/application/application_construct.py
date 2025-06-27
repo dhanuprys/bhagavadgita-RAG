@@ -5,6 +5,9 @@ from rich.console import Console  # harmfull
 
 from app.application.repository.chapter_repository import ChapterRepository
 from app.application.repository.verse_repository import VerseRepository
+from app.application.repository.verse_translation_repository import (
+    VerseTranslationRepository,
+)
 from app.application.repository.gita_repository import (
     GitaRepository,
 )
@@ -24,6 +27,7 @@ class ApplicationContainer:
     llm_collection: LLMCollection
     chapter_repository: ChapterRepository
     verse_repository: VerseRepository
+    verse_translation_repository: VerseTranslationRepository
     gita_repository: GitaRepository
     chapter_searcher: Searcher
     gita_searcher: Searcher

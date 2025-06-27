@@ -10,5 +10,11 @@ class VerseTranslationRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_chapter_verse_number(
+        self, chapter_number: int, verse_number: int
+    ) -> List[VerseTranslationEntity]:
+        pass
+
+    @abstractmethod
     def get_by_verse_id(self, verse_id: int) -> List[VerseTranslationEntity]:
         pass
