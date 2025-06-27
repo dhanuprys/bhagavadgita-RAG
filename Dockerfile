@@ -15,12 +15,15 @@ RUN pip wheel --no-cache-dir --wheel-dir=/wheels -r requirements.txt
 FROM python:3.10-slim
 
 # Set persistent model cache paths
-ENV TRANSFORMERS_CACHE=/cache/transformers \
+ENV HF_HOME=/cache/huggingface \
     TORCH_HOME=/cache/torch \
     SENTENCE_TRANSFORMERS_HOME=/cache/sentence-transformers
 
 # Security: run as non-root user
 RUN useradd -m appuser
+
+RUN mkdir -p /cache && chown -R appuser:appuser /cache
+
 WORKDIR /home/appuser
 
 # Copy built wheels and install dependencies
