@@ -1,5 +1,5 @@
-CREATE DATABASE bhagavadgita;
-USE bhagavadgita;
+-- CREATE DATABASE bhagavadgita;
+-- USE bhagavadgita;
 
 -- Chapters Table
 CREATE TABLE chapters (
@@ -11,6 +11,9 @@ CREATE TABLE chapters (
     summary TEXT NOT NULL,
     verses_count INT NOT NULL
 );
+
+-- Index for faster lookup on chapter_number
+CREATE INDEX idx_chapters_chapter_number ON chapters(chapter_number);
 
 -- Verses Table
 CREATE TABLE verses (
@@ -24,8 +27,10 @@ CREATE TABLE verses (
     FOREIGN KEY (chapter_id) REFERENCES chapters(id)
 );
 
--- Index for faster lookup on chapter_id
+-- Indexes for performance
 CREATE INDEX idx_verses_chapter_id ON verses(chapter_id);
+CREATE INDEX idx_verses_verse_number ON verses(verse_number);
+CREATE INDEX idx_verses_chapter_verse ON verses(chapter_id, verse_number); -- for composite lookup
 
 -- Verse Translations Table
 CREATE TABLE verse_translations (
