@@ -55,6 +55,7 @@ class ApplicationConstruct(ABC):
             self.app.chapter_searcher.load_index()
         else:
             self.app.chapter_searcher.build_index(chapters)
+
         self.console.print(
             f"[blue][INFO][/blue] Berhasil memuat {len(chapters)} baris data."
         )
@@ -84,22 +85,14 @@ class ApplicationConstruct(ABC):
         for pattern_matching_service in self.app.pattern_matching_services:
             matching_result = pattern_matching_service.match(user_input)
             if matching_result:
-                results = pattern_matching_service.handle(
-                    self.app.llm_collection, user_input, matching_result
-                )
+                results = pattern_matching_service.handle(user_input, matching_result)
                 break
 
         if not results:
-            if "bab" in user_input.lower():
-                self.console.print(
-                    "[yellow][AI][/yellow] Menggunakan model [b]chapter translation[/b]..."
-                )
-                results = self.app.chapter_searcher.search(user_input)
-            else:
-                self.console.print(
-                    "[yellow][AI][/yellow] Menggunakan model [b]verse translation[/b]..."
-                )
-                results = self.app.gita_searcher.search(user_input)
+            self.console.print(
+                "[yellow][AI][/yellow] Menggunakan model [b]FULL GITA SEARCH[/b]..."
+            )
+            results = self.app.gita_searcher.search(user_input)
 
         return results
 

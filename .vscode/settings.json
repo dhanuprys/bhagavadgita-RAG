@@ -6,4 +6,5 @@
       "source.organizeImports": "always"
     },
   },
+  "python.analysis.typeCheckingMode": "standard"
 }

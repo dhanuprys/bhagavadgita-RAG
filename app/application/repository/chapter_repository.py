@@ -6,7 +6,7 @@ from app.domain.entity.chapter_entity import ChapterEntity
 
 class ChapterRepository(ABC):
     @abstractmethod
-    def get_all() -> List[ChapterEntity]:
+    def get_all(self) -> List[ChapterEntity]:
         pass
 
     @abstractmethod

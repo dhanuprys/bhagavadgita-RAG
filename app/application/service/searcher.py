@@ -7,7 +7,7 @@ class Searcher(ABC):
         pass
 
     @abstractmethod
-    def build_index(self) -> bool:
+    def build_index(self, data) -> bool:
         pass
 
     @abstractmethod

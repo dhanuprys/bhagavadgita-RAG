@@ -6,5 +6,5 @@ from app.domain.entity.gita_entity import GitaEntity
 
 class GitaRepository(ABC):
     @abstractmethod
-    def get_all() -> List[GitaEntity]:
+    def get_all(self) -> List[GitaEntity]:
         pass
