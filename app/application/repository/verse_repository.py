@@ -6,11 +6,15 @@ from app.domain.entity.verse_entity import VerseEntity
 
 class VerseRepository(ABC):
     @abstractmethod
-    def get_all() -> List[VerseEntity]:
+    def get_all(self) -> List[VerseEntity]:
         pass
 
     @abstractmethod
     def get_by_chapter_number(self, chapter_number) -> List[VerseEntity]:
+        pass
+
+    @abstractmethod
+    def get_random(self, count: int) -> List[VerseEntity]:
         pass
 
     @abstractmethod

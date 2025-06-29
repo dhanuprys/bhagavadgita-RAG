@@ -21,6 +21,7 @@ class HttpApp(ApplicationConstruct):
         self.console = Console()
 
         self.prepare_model()
+        self.prepare_matcher()
         self.http = FastAPI()
 
         self.register_routes()

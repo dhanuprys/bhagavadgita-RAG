@@ -25,11 +25,21 @@ class MysqlClient:
             "charset": charset,
         }
         self.pool = pooling.MySQLConnectionPool(
-            pool_name=pool_name, pool_size=pool_size, **self.config
+            pool_name=pool_name,
+            pool_size=pool_size,
+            pool_reset_session=True,
+            **self.config,
         )
 
     def _get_conn(self):
-        return self.pool.get_connection()
+        try:
+            conn = self.pool.get_connection()
+            if not conn.is_connected():
+                conn.reconnect(attempts=3, delay=2)
+            return conn
+        except mysql.connector.Error as e:
+            print(f"[MySQL] Error getting connection: {e}")
+            raise
 
     def query(self, sql, params=None, dict_cursor=True):
         """

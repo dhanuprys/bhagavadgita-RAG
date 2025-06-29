@@ -1,10 +1,18 @@
-from dataclasses import dataclass
-from typing import Generic, List, TypeVar
+from dataclasses import dataclass, field
+from typing import List, Literal
 
-T = TypeVar("T")
+ResultType = Literal["context", "direct"]
 
 
 @dataclass
-class PatternMatchingResult(Generic[T]):
-    output: str
-    attachments: List[T]
+class PatternMatchingContext:
+    label: str
+    content: str
+    link: str | None = None
+
+
+@dataclass
+class PatternMatchingResult:
+    type: ResultType = "direct"
+    output: str = ""
+    context: List[PatternMatchingContext] = field(default_factory=list)

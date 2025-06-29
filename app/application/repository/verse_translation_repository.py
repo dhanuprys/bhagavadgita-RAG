@@ -6,7 +6,7 @@ from app.domain.entity.verse_translation_entity import VerseTranslationEntity
 
 class VerseTranslationRepository(ABC):
     @abstractmethod
-    def get_all():
+    def get_all(self):
         pass
 
     @abstractmethod

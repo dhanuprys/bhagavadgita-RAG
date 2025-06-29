@@ -1,38 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from rich.console import Console  # harmfull
+from app.application.application_container import ApplicationContainer
 
-from app.application.repository.chapter_repository import ChapterRepository
-from app.application.repository.verse_repository import VerseRepository
-from app.application.repository.verse_translation_repository import (
-    VerseTranslationRepository,
-)
-from app.application.repository.gita_repository import (
-    GitaRepository,
-)
-from app.application.service.llm_adapter import LLMCollection
-from app.application.service.pattern_matching import PatternMatching
-from app.application.service.searcher import Searcher
-from app.application.service.prompt_builder import PromptBuilder
+from rich.console import Console  # harmfull
 from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.entity.gita_entity import GitaEntity, MixedGitaEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
-
-from dataclasses import dataclass
-
-
-@dataclass
-class ApplicationContainer:
-    llm_collection: LLMCollection
-    chapter_repository: ChapterRepository
-    verse_repository: VerseRepository
-    verse_translation_repository: VerseTranslationRepository
-    gita_repository: GitaRepository
-    chapter_searcher: Searcher
-    gita_searcher: Searcher
-    prompt_builder: PromptBuilder
-    pattern_matching_services: List[PatternMatching]
 
 
 class ApplicationConstruct(ABC):
@@ -73,20 +47,20 @@ class ApplicationConstruct(ABC):
             f"[blue][INFO][/blue] Berhasil memuat {len(complete_gita)} baris data."
         )
 
+    def prepare_matcher(self):
+        for matcher in self.app.pattern_matching_services:
+            matcher.set_app(self.app)
+
     def get_context(
         self, user_input: str
-    ) -> (
-        List[ChapterEntity]
-        | List[GitaEntity | MixedGitaEntity]
-        | PatternMatchingResult
-        | None
-    ):
+    ) -> List[GitaEntity | MixedGitaEntity] | PatternMatchingResult | None:
         results = None
         for pattern_matching_service in self.app.pattern_matching_services:
             matching_result = pattern_matching_service.match(user_input)
             if matching_result:
                 results = pattern_matching_service.handle(user_input, matching_result)
-                break
+                if results:
+                    break
 
         if not results:
             self.console.print(

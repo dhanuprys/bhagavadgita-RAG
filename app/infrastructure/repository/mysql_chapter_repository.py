@@ -4,8 +4,8 @@ from app.infrastructure.dbclient.mysql_client import MysqlClient
 
 
 class MysqlChapterRepository(ChapterRepository):
-    def __init__(self):
-        self.client = MysqlClient()
+    def __init__(self, client: MysqlClient):
+        self.client = client
 
     def get_all(self):
         result = self.client.query(

@@ -9,11 +9,13 @@ class PromptBuilder(ABC):
         pass
 
     @abstractmethod
-    def generate_global_gita_prompt(
-        self, question: str, gita_list: List[GitaEntity], markdown: bool = False
+    def generate_flexible_prompt(
+        self, question: str, context_list: List[str], markdown: bool = False
     ) -> str:
         pass
 
     @abstractmethod
-    def generate_chapter_prompt(self, question: str, markdown: bool = False) -> str:
+    def generate_global_gita_prompt(
+        self, question: str, gita_list: List[GitaEntity], markdown: bool = False
+    ) -> str:
         pass

@@ -11,7 +11,7 @@ class LLMAdapter(ABC):
         pass
 
     @abstractmethod
-    def generate(self, prompt: str, max_tokens: int) -> str:
+    def generate(self, prompt: str, max_tokens: int = 256) -> str:
         pass
 
     @abstractmethod

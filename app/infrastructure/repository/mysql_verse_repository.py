@@ -4,14 +4,24 @@ from app.infrastructure.dbclient.mysql_client import MysqlClient
 
 
 class MysqlVerseRepository(VerseRepository):
-    def __init__(self):
-        self.client = MysqlClient()
+    def __init__(self, client: MysqlClient):
+        self.client = client
 
     def get_all(self):
         result = self.client.query(
             """
             SELECT * FROM verses;
             """
+        )
+
+        return [VerseEntity(**row) for row in result]
+
+    def get_random(self, count: int):
+        result = self.client.query(
+            """
+            SELECT * FROM verses INNER JOIN chapters ON verses.chapter_id = chapters.id ORDER BY RAND() LIMIT %s;
+            """,
+            (count,),
         )
 
         return [VerseEntity(**row) for row in result]
