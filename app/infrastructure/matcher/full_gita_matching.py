@@ -34,6 +34,13 @@ Output wajib dalam format JSON yang valid. Output HARUS berupa string JSON menta
 
 5.  `get_chapter_metadata`: Saat pengguna menanyakan info spesifik tentang bab (jumlah ayat/nama bab).
     * Parameter: `chapter` (integer), `metadata_type` (string, "verse_count" atau "chapter_name")
+    
+6. `get_writer`: Saat pengguna menanyakan informasi pembuat/penulis kitab bhagavad gita
+    * Parameter: Tidak ada parameter
+
+7. `get_chapter_count`: Saat pengguna menanyakan jumlah bab pada kitab bhagavad gita
+    * Parameter: Tidak ada parameter
+
 
 ### Kategori Penolakan:
 
@@ -75,6 +82,14 @@ Pertanyaan: "Apa nama bab dari bab 18?"
 JSON:
 {"action": "get_chapter_metadata", "parameters": {"chapter": 18, "metadata_type": "chapter_name"}}
 
+Pertanyaan: "siapa penulis bhagavad gita?"
+JSON:
+{"action": "get_writer", "parameters": {}}
+
+Pertanyaan: "ada berapa bab dalam bhagavad gita?"
+JSON:
+{"action": "get_chapter_count", "parameters": {}}
+
 Pertanyaan: "Tolong ringkasannya"
 JSON:
 {"action": "unsupported_query", "parameters": {}}
@@ -114,7 +129,32 @@ JSON:
         action_type = matching_result["action"]
         parameters = matching_result["parameters"]
 
-        if action_type == "get_random_verses":
+        if action_type == "get_writer":
+            context = [
+                PatternMatchingContext(
+                    label="Penulis",
+                    content="Rsi Vyāsa, juga dikenal sebagai Krishna Dvaipayāna atau Vedavyāsa, adalah resi legendaris dalam tradisi Hindu yang lahir di tepian Sungai Yamuna sebagai putra Parāśara dan Satyavatī. Ia digelari “Veda‑Vyāsa” karena membagi Veda tunggal menjadi empat kitab—Rig, Yajur, Sāma, dan Atharva—agar lebih mudah dipelajari dan dipahami. Ia adalah pengarang epik Mahābhārata yang sangat panjang, termasuk 700 ayat Bhagavad Gītā dalam bagian Bhīṣma Parva, yang ia diktakan kepada dewa Ganesha. Selain itu, ia menulis 18 Purāṇa, menyusun Brahma Sutra, dan dianggap sebagai avatāra parsial Wiṣṇu serta salah satu Chiranjīvi (makhluk abadi). Rsi Vyāsa juga berperan penting dalam memelihara keturunan dinasti Kuru melalui praktik niyoga, serta dihormati setiap tahun pada hari Guru Pūrṇimā sebagai guru abadi umat manusia.",
+                )
+            ]
+            return PatternMatchingResult(type="context", context=context)
+        elif action_type == "get_chapter_count":
+            chapters = self.app.chapter_repository.get_all()
+            context_content = ", ".join(
+                [f"BAB {x.chapter_number}: {x.name}" for x in chapters]
+            )
+            display_content = "\n".join(
+                [f"- Bab {x.chapter_number} - {x.name}" for x in chapters]
+            )
+            context = [
+                PatternMatchingContext(
+                    label="Jumlah Bab",
+                    content=f"Terdapat {len(chapters)} bab Bhagavad Gita. Terdiri dari {context_content}",
+                    display_content=f"Terdapat {len(chapters)} bab Bhagavad Gita. Terdiri dari:\n\n{display_content}",
+                    link=f"{self.library_base_url}",
+                )
+            ]
+            return PatternMatchingResult(type="context", context=context)
+        elif action_type == "get_random_verses":
             # parameters: count
             gitas = self.app.gita_repository.get_random_verses(parameters["count"])
             context = []
