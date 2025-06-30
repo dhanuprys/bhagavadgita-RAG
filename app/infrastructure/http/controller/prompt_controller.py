@@ -105,7 +105,7 @@ class PromptController(Controller):
         user_input = request.message
         results = self.app.get_context(user_input)
 
-        self.console.print(f"[red]PROMPT[/red] {user_input}")
+        self.console.print(f"[red][PROMPT][/red] {user_input}")
 
         if not results or (isinstance(results, list) and len(results) <= 0):
             chat_response.answer = "Pertanyaan anda tidak sesuai konteks."
