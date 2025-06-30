@@ -1,6 +1,6 @@
 from typing import Literal, List
 
-import google.generativeai as genai
+from google import genai
 from rich.console import Console
 
 from app.application.service.llm_adapter import LLMAdapter
@@ -8,13 +8,16 @@ from app.domain.value_object.llm_stream import LLMStream
 
 
 class GeminiLLM(LLMAdapter):
-    def __init__(self, model_id: Literal["gemini-2.0-flash"], api_keys: List[str]):
+    def __init__(
+        self,
+        model_id: Literal["gemini-2.0-flash", "gemini-2.5-flash"],
+        api_keys: List[str],
+    ):
         self.console = Console()
         self.model_id = model_id
         self.__API_KEY_ROTATION_INDEX = 0
         self.__API_KEY_LENGTH = len(api_keys)
         self.__API_KEYS = api_keys
-        self.model = None
 
     def setup(self, type: str):
         self.console.print(
@@ -22,17 +25,24 @@ class GeminiLLM(LLMAdapter):
         )
 
         # Load model
-        self.model = genai.GenerativeModel(self.model_id)
+        self.__refresh_client()
 
     def generate(self, prompt: str, max_tokens=256):
-        genai.configure(api_key=self.__API_KEY)
+        self.__refresh_client()
 
-        result = self.model.generate_content(prompt)
-        return result.text
+        result = self.client.models.generate_content(
+            model=self.model_id,
+            contents=prompt,
+        )
+
+        return result.text or ""
 
     def generate_stream(self, prompt: str, max_tokens=256):
         response = self.generate(prompt, max_tokens)
-        yield LLMStream(model=self.model_id, content_chunk=response)
+        yield LLMStream(model=self.model_id, content_chunk=response or "")
+
+    def __refresh_client(self):
+        self.client: genai.Client = genai.Client(api_key=self.__API_KEY)
 
     def __rotate_api_key(self):
         self.__API_KEY_ROTATION_INDEX += 1

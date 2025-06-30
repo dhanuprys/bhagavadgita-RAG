@@ -89,7 +89,7 @@ JSON:
             "{user_input}", user_input
         )
         check_result = (
-            self.app.llm_collection.general.generate(prompt)
+            self.app.llm_collection.intent_classifier.generate(prompt)
             .replace("```json", "")
             .replace("```", "")
             .strip()

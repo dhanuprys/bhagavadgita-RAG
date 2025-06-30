@@ -19,7 +19,7 @@ class ApplicationConstruct(ABC):
 
     def prepare_model(self):
         self.app.llm_collection.general.setup("general")
-        self.app.llm_collection.context_focused.setup("context_focused")
+        self.app.llm_collection.intent_classifier.setup("intent_classifier")
         self.app.llm_collection.paraphrase.setup("paraphrase")
 
         # Load chapter model

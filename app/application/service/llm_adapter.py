@@ -24,5 +24,5 @@ class LLMAdapter(ABC):
 @dataclass
 class LLMCollection:
     general: LLMAdapter
-    context_focused: LLMAdapter
+    intent_classifier: LLMAdapter
     paraphrase: LLMAdapter
