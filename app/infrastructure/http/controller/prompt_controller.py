@@ -127,7 +127,7 @@ class PromptController(Controller):
                     chat_response.context.append(
                         ChatContext(
                             label=ctx.label,
-                            content=ctx.content,
+                            content=ctx.display_content,
                             link=ctx.link,
                         )
                     )

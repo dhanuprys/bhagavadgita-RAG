@@ -146,6 +146,11 @@ Kode sloka: BG {gita.c_chapter_number}.{gita.v_verse_number}\n
 Sanskerta: *{gita.v_text_sanskrit.strip()}*\n
 Pengertian: {gita.vt_content.strip()}\n
                     """,
+                        display_content=f"""
+BG {gita.c_chapter_number}.{gita.v_verse_number}\n
+*{gita.v_text_sanskrit.strip()}*\n
+{gita.vt_content.strip()}\n
+                        """,
                     )
                 )
 
@@ -183,6 +188,10 @@ Bab {chapter.chapter_number} - {chapter.name}\n
 Ringkasan: {chapter.summary}\n
 Jumlah ayat: {chapter.verses_count}\n
                     """,
+                        display_content=f"""
+Bab {chapter.chapter_number} - {chapter.name}\n
+{chapter.summary}\n
+                        """,
                         link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                     )
                 )
@@ -203,6 +212,10 @@ Jumlah ayat: {chapter.verses_count}\n
 Bab {chapter.chapter_number} - {chapter.name}\n
 Jumlah ayat: {chapter.verses_count}\n
                     """,
+                            display_content=f"""
+Bab {chapter.chapter_number} - {chapter.name}\n
+Terdapat {chapter.verses_count} sloka di bab ini.\n
+                            """
                             link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                         )
                     )

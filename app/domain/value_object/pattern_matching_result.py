@@ -8,7 +8,12 @@ ResultType = Literal["context", "direct"]
 class PatternMatchingContext:
     label: str
     content: str
+    display_content: str = ""
     link: str | None = None
+
+    def __post_init__(self):
+        if not self.display_content:
+            self.display_content = self.content
 
 
 @dataclass
