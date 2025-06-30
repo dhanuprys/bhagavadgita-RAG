@@ -215,7 +215,7 @@ Jumlah ayat: {chapter.verses_count}\n
                             display_content=f"""
 Bab {chapter.chapter_number} - {chapter.name}\n
 Terdapat {chapter.verses_count} sloka di bab ini.\n
-                            """
+                            """,
                             link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                         )
                     )
