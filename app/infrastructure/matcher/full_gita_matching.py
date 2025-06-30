@@ -249,7 +249,7 @@ Bab {chapter.chapter_number} - {chapter.name}\n
                         attachments=[
                             Attachment(
                                 type="url",
-                                title=f"Informasi Bab {chapter.chapter_number}",
+                                title=f"Bab {chapter.chapter_number} - {chapter.name}",
                                 url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                             ),
                         ],
@@ -280,7 +280,7 @@ Terdapat {chapter.verses_count} sloka di bab ini.\n
                             attachments=[
                                 Attachment(
                                     type="url",
-                                    title=f"Informasi Bab {chapter.chapter_number}",
+                                    title=f"Bab {chapter.chapter_number} - {chapter.name}",
                                     url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                                 ),
                             ],
@@ -297,7 +297,7 @@ Bab {chapter.chapter_number} - {chapter.name}\n
                             attachments=[
                                 Attachment(
                                     type="url",
-                                    title=f"Informasi Bab {chapter.chapter_number}",
+                                    title=f"Bab {chapter.chapter_number} - {chapter.name}",
                                     url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
                                 ),
                             ],
