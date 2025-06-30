@@ -99,10 +99,13 @@ class PromptController(Controller):
         return {"suggestions": self.get_random_suggestions()}
 
     async def handle_prompt(self, request: PromptRequest):
-        user_input = request.message
-        results = self.app.get_context(user_input)
         chat_response = ChatResponse()
         chat_response.suggestions = self.get_random_suggestions()
+
+        user_input = request.message
+        results = self.app.get_context(user_input)
+
+        self.console.print(f"[red]PROMPT[/red] {user_input}")
 
         if not results or (isinstance(results, list) and len(results) <= 0):
             chat_response.answer = "Pertanyaan anda tidak sesuai konteks."
