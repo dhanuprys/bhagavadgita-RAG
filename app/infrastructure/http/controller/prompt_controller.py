@@ -51,6 +51,7 @@ class PromptController(Controller):
     def __init__(self):
         self._router = APIRouter()
         self._router.post("/prompt")(self.handle_prompt)
+        self._router.get("/suggestions")(self.handle_random_suggestions)
         self.console = Console()
 
     @property
@@ -89,16 +90,13 @@ class PromptController(Controller):
             "apa judul dari bab 8?",  # Metadata: chapter_name
             "Bab 11 punya berapa ayat?",  # Metadata: verse_count
             "sebutkan nama lain dari bab 1",  # Metadata: chapter_name
-            # Kategori: unsupported_query (Permintaan yang Harus Ditolak)
-            "jelaskan tentang konsep reinkarnasi secara umum",  # Terlalu luas, tidak spesifik pada Gita
-            "siapa penulis kitab Mahabharata?",  # Di luar lingkup (fokus pada isi Gita)
-            "terima kasih",  # Sapaan/penutup
-            "tolong bantuannya",  # Permintaan tidak lengkap
-            "bagaimana cuaca besok?",  # Sama sekali tidak relevan
         ]
 
         random.shuffle(suggestions)
         return suggestions[:4]
+
+    async def handle_random_suggestions(self):
+        return {"suggestions": self.get_random_suggestions()}
 
     async def handle_prompt(self, request: PromptRequest):
         user_input = request.message
