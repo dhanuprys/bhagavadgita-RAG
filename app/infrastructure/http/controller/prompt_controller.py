@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from app.domain.entity.gita_entity import GitaEntity, MixedGitaEntity
 from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
+from app.domain.value_object.attachment import Attachment
 from app.infrastructure.http.controller.controller import Controller
 from pydantic import BaseModel
 from rich.console import Console
@@ -31,6 +32,7 @@ class ChatResponse:
     context: List[ChatContext] = field(default_factory=list)
     answer_system: Literal["intent", "semantic"] = "intent"
     suggestions: List[str] = field(default_factory=list)
+    attachments: List[Attachment] = field(default_factory=list)
 
     def to_dict(self):
         return {
@@ -38,6 +40,7 @@ class ChatResponse:
             "context": [x.to_dict() for x in self.context],
             "answer_system": self.answer_system,
             "suggestions": self.suggestions,
+            "attachments": [x.to_dict() for x in self.attachments],
         }
 
 
@@ -131,6 +134,7 @@ class PromptController(Controller):
                             link=ctx.link,
                         )
                     )
+                    chat_response.attachments.extend(ctx.attachments)
 
                 prompt = self.ctx.prompt_builder.generate_flexible_prompt(
                     user_input,

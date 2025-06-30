@@ -4,6 +4,7 @@ from app.domain.value_object.pattern_matching_result import (
     PatternMatchingResult,
     PatternMatchingContext,
 )
+from app.domain.value_object.attachment import Attachment
 from os import getenv
 
 
@@ -151,6 +152,18 @@ BG {gita.c_chapter_number}.{gita.v_verse_number}\n
 *{gita.v_text_sanskrit.strip()}*\n
 {gita.vt_content.strip()}\n
                         """,
+                        attachments=[
+                            Attachment(
+                                type="url",
+                                title=f"Bab {gita.c_chapter_number} Sloka {gita.v_verse_number}",
+                                url=f"{self.library_base_url}/chapter/{gita.c_chapter_number}/verse/{gita.v_verse_number}",
+                            ),
+                            Attachment(
+                                type="audio",
+                                title=f"Audio sloka {gita.c_chapter_number}.{gita.v_verse_number}",
+                                url=gita.v_audio_url,
+                            ),
+                        ],
                     )
                 )
 
@@ -193,6 +206,13 @@ Bab {chapter.chapter_number} - {chapter.name}\n
 {chapter.summary}\n
                         """,
                         link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                        attachments=[
+                            Attachment(
+                                type="url",
+                                title=f"Informasi Bab {chapter.chapter_number}",
+                                url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                            ),
+                        ],
                     )
                 )
 
@@ -217,6 +237,13 @@ Bab {chapter.chapter_number} - {chapter.name}\n
 Terdapat {chapter.verses_count} sloka di bab ini.\n
                             """,
                             link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                            attachments=[
+                                Attachment(
+                                    type="url",
+                                    title=f"Informasi Bab {chapter.chapter_number}",
+                                    url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                                ),
+                            ],
                         )
                     )
                 elif parameters["metadata_type"] == "chapter_name":
@@ -227,6 +254,13 @@ Terdapat {chapter.verses_count} sloka di bab ini.\n
 Bab {chapter.chapter_number} - {chapter.name}\n
                     """,
                             link=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                            attachments=[
+                                Attachment(
+                                    type="url",
+                                    title=f"Informasi Bab {chapter.chapter_number}",
+                                    url=f"{self.library_base_url}/chapter/{chapter.chapter_number}",
+                                ),
+                            ],
                         )
                     )
 

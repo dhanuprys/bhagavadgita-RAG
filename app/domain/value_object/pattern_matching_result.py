@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Literal
+from app.domain.value_object.attachment import Attachment
+
 
 ResultType = Literal["context", "direct"]
 
@@ -10,6 +12,7 @@ class PatternMatchingContext:
     content: str
     display_content: str = ""
     link: str | None = None
+    attachments: List[Attachment] = field(default_factory=list)
 
     def __post_init__(self):
         if not self.display_content:

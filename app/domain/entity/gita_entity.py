@@ -10,6 +10,7 @@ class GitaEntity:
     v_text_sanskrit: str
     v_text_sanskrit_meanings: str
     v_verse_number: int
+    v_audio_url: str
     c_id: int
     c_chapter_number: int
     c_name: str
