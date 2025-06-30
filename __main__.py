@@ -1,5 +1,8 @@
 from dotenv import load_dotenv
 from os import getenv
+import json
+from typing import List
+
 from app.application.service.llm_adapter import LLMCollection
 from app.application.application_container import ApplicationContainer
 from app.infrastructure.http.app import HttpApp
@@ -26,8 +29,18 @@ load_dotenv()
 
 
 def main():
+    env_gemini_keys = getenv("GEMINI_API_KEYS")
+
+    if env_gemini_keys is None:
+        print("Please set GEMINI_API_KEYS environment variable")
+        exit()
+
+    gemini_keys: List[str] = json.loads(env_gemini_keys)
     mysql_client = MysqlClient()
-    llm = GeminiLLM("gemini-2.0-flash", getenv("GEMINI_API_KEY"))
+    llm = GeminiLLM(
+        "gemini-2.0-flash",
+        gemini_keys,
+    )
     app_container = ApplicationContainer(
         # ONLY CAN USE ONE LLM INSTANCE DUE TO Out-Of-Memory
         llm_collection=LLMCollection(
