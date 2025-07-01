@@ -5,7 +5,7 @@ from typing import List
 
 class GeminiPrompt(PromptBuilder):
     def check_question_relativeness(self, question: str) -> str:
-        pass
+        return super().check_question_relativeness(question)
 
     def generate_flexible_prompt(
         self, question: str, context_list, markdown: bool = False
