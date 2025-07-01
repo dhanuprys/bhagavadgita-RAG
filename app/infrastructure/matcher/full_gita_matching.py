@@ -163,7 +163,8 @@ JSON:
                 context.append(
                     PatternMatchingContext(
                         label=f"BG {gita.c_chapter_number}.{gita.v_verse_number}",
-                        content=f"\n\n*{gita.v_text_sanskrit.strip()}*\n\n{gita.vt_content.strip()}",
+                        content=f"{gita.v_text_sanskrit.strip()}\n\n{gita.vt_content.strip()}",
+                        display_content=f"\n\n*{gita.v_text_sanskrit.strip()}*\n\n{gita.vt_content.strip()}",
                         link=f"{self.library_base_url}/chapter/{gita.c_chapter_number}/verse/{gita.v_verse_number}",
                     )
                 )
