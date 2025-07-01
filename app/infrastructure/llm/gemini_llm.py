@@ -10,7 +10,12 @@ from app.domain.value_object.llm_stream import LLMStream
 class GeminiLLM(LLMAdapter):
     def __init__(
         self,
-        model_id: Literal["gemini-2.0-flash", "gemini-2.5-flash"],
+        model_id: Literal[
+            "gemini-2.0-flash",
+            "gemini-2.5-flash",
+            "gemini-2.0-flash-lite",
+            "gemma-3-12b-it",
+        ],
         api_keys: List[str],
     ):
         self.console = Console()

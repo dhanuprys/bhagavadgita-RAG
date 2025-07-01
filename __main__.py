@@ -37,11 +37,11 @@ def main():
 
     gemini_keys: List[str] = json.loads(env_gemini_keys)
     llm = GeminiLLM(
-        "gemini-2.5-flash",
+        "gemini-2.0-flash",
         gemini_keys,
     )
     llm_intent = GeminiLLM(
-        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
         gemini_keys,
     )
 
@@ -49,7 +49,7 @@ def main():
     app_container = ApplicationContainer(
         # ONLY CAN USE ONE LLM INSTANCE DUE TO Out-Of-Memory
         llm_collection=LLMCollection(
-            general=llm, intent_classifier=llm, paraphrase=llm
+            general=llm, intent_classifier=llm_intent, paraphrase=llm
         ),
         chapter_repository=MysqlChapterRepository(client=mysql_client),
         verse_repository=MysqlVerseRepository(client=mysql_client),

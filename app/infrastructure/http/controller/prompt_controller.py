@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from rich.console import Console
 from os import getenv
 import random
+import time
 
 
 @dataclass
@@ -106,7 +107,12 @@ class PromptController(Controller):
         chat_response.suggestions = self.get_random_suggestions()
 
         user_input = request.message
+        # perf
+        start_time = time.perf_counter()
         results = self.app.get_context(user_input)
+        end_time = time.perf_counter()
+        time_duration = end_time - start_time
+        print(f"Took {time_duration:.3f} seconds")
 
         self.console.print(f"[red][PROMPT][/red] {user_input}")
 
@@ -141,9 +147,14 @@ class PromptController(Controller):
                     flatten_pattern_context,
                 )
 
+                # perf
+                start_time = time.perf_counter()
                 response = self.ctx.llm_collection.general.generate_stream(prompt, 256)
                 for chunk in response:
                     chat_response.answer += chunk.content_chunk
+                end_time = time.perf_counter()
+                time_duration = end_time - start_time
+                print(f"Took (generation) {time_duration:.3f} seconds")
             elif results.type == "direct":
                 chat_response.answer = results.output
         if isinstance(results, list):
@@ -202,9 +213,14 @@ class PromptController(Controller):
             self.console.print(
                 "[yellow][AI][/yellow] AI sedang merangkai kalimat yang sesuai"
             )
+            # perf
+            start_time = time.perf_counter()
             response = self.ctx.llm_collection.general.generate_stream(prompt, 256)
 
             for chunk in response:
                 chat_response.answer += chunk.content_chunk
+            end_time = time.perf_counter()
+            time_duration = end_time - start_time
+            print(f"Took (generation#2) {time_duration:.3f} seconds")
 
         return chat_response.to_dict()
