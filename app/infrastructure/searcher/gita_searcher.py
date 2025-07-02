@@ -1,6 +1,6 @@
 import os
 import pickle
-from typing import List, Literal
+from typing import List, Tuple
 
 import faiss
 from sentence_transformers import SentenceTransformer
@@ -14,14 +14,14 @@ class GitaSearcher(Searcher):
         self.path_prefix = "data/model/"
         self.model = SentenceTransformer("intfloat/multilingual-e5-base")
         self.index = None
-        self.verse_meta: List[GitaEntity] = []
+        self.verse_meta: List[GitaEntity | MixedGitaEntity] = []
 
     def builded(self):
         return os.path.exists(self.path_prefix + "gita.index") and os.path.exists(
             self.path_prefix + "gita_meta.pkl"
         )
 
-    def build_index(self, gita: List[GitaEntity]):
+    def build_index(self, gita: List[GitaEntity]) -> bool:
         texts = [
             f"passage: Bab {v.c_chapter_number} sloka {v.v_verse_number} mengatakan {v.vt_content}"
             for v in gita
@@ -37,10 +37,14 @@ class GitaSearcher(Searcher):
         with open(self.path_prefix + "gita_meta.pkl", "wb") as f:
             pickle.dump(self.verse_meta, f)
 
-    def load_index(self):
+        return True
+
+    def load_index(self) -> bool:
         self.index = faiss.read_index(self.path_prefix + "gita.index")
         with open(self.path_prefix + "gita_meta.pkl", "rb") as f:
             self.verse_meta = pickle.load(f)
+
+        return True
 
     def search(self, query: str, top_k=3) -> List[GitaEntity | MixedGitaEntity]:
         query = f"query: {query}"
@@ -68,7 +72,7 @@ class GitaSearcher(Searcher):
 
     def chunk_verses(
         self, gita: List[GitaEntity], size: int = 3
-    ) -> List[MixedGitaEntity]:
+    ) -> Tuple[List[str], List[MixedGitaEntity]]:
         chunks = []
         objects = []
         for i in range(0, len(gita), size):
