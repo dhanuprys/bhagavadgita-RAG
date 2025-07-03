@@ -12,7 +12,7 @@ from app.domain.entity.gita_entity import GitaEntity, MixedGitaEntity
 class GitaSearcher(Searcher):
     def __init__(self):
         self.path_prefix = "data/model/"
-        self.model = SentenceTransformer("intfloat/multilingual-e5-base")
+        self.model = SentenceTransformer("intfloat/multilingual-e5-large")
         self.index = None
         self.verse_meta: List[GitaEntity | MixedGitaEntity] = []
 
