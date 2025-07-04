@@ -126,12 +126,12 @@ class PromptController(Controller):
 
             if results.type == "context":
                 flatten_pattern_context: List[str] = []
-                seen_context: List[str] = []
+                seen_pattern_context: List[str] = []
                 for ctx in results.context:
-                    if ctx.label in seen_context:
+                    if ctx.label in seen_pattern_context:
                         continue
 
-                    seen_context.append(ctx.label)
+                    seen_pattern_context.append(ctx.label)
                     flatten_pattern_context.append(ctx.content)
                     chat_response.context.append(
                         ChatContext(
