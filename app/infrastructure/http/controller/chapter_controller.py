@@ -78,7 +78,7 @@ class ChapterController(Controller):
         )
         
         self._router.get(
-            "/",
+            "",
             response_model=List[ChapterResponse],
             summary="Get all chapters",
             description="Retrieve all 18 chapters of the Bhagavad Gita with their metadata including names in multiple languages, summaries, and verse counts.",
