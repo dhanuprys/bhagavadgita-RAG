@@ -6,7 +6,7 @@ from app.domain.entity.chapter_entity import ChapterEntity
 from app.domain.value_object.pattern_matching_result import PatternMatchingResult
 from app.domain.value_object.attachment import Attachment
 from app.infrastructure.http.controller.controller import Controller
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from rich.console import Console
 from os import getenv
 import random
@@ -46,23 +46,144 @@ class ChatResponse:
 
 
 class PromptRequest(BaseModel):
-    message: str
+    """Request model for prompt endpoint"""
+    message: str = Field(..., description="User's question or prompt about Bhagavad Gita")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "Tolong berikan isi dari Bhagavad Gita bab 2 sloka 47"
+            }
+        }
+
+
+class ChatContextResponse(BaseModel):
+    """Response model for chat context"""
+    label: str
+    content: str
+    link: str | None = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "label": "BG 2.47",
+                "content": "\nBG 2.47\n\n*karmaṇy-evādhikāras te mā phaleṣhu kadāchana\nmā karma-phala-hetur bhūr mā te saṅgo 'stvakarmaṇi*\n\nEngkau hanya memiliki hak untuk bekerja, tetapi tidak untuk buahnya. Jangan terdorong oleh hasil kerjamu, pun jangan terikat pada kelambanan.\n",
+                "link": None
+            }
+        }
+
+
+class AttachmentResponse(BaseModel):
+    """Response model for attachment"""
+    type: Literal["audio", "url"]
+    title: str
+    url: str
+    description: str = ""
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "type": "url",
+                "title": "Bab 2 Sloka 47",
+                "url": "http://localhost:5173/chapter/2/verse/47",
+                "description": ""
+            }
+        }
+
+
+class PromptResponse(BaseModel):
+    """Response model for prompt endpoint"""
+    answer: str
+    context: List[ChatContextResponse]
+    answer_system: Literal["intent", "semantic"]
+    suggestions: List[str]
+    attachments: List[AttachmentResponse]
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "answer": "Tentu, dengan senang hati saya akan memberikan penjelasan mengenai Bhagavad Gita bab 2, sloka 47:\n\n> *karmaṇy-evādhikāras te mā phaleṣhu kadāchana\nmā karma-phala-hetur bhūr mā te saṅgo 'stvakarmaṇi*\n\nMaknanya adalah:\n\n> Engkau hanya memiliki hak untuk bekerja, tetapi tidak untuk buahnya. Jangan terdorong oleh hasil kerjamu, pun jangan terikat pada kelambanan.\n\nSloka ini mengajarkan kita untuk fokus pada pelaksanaan tugas dengan sebaik-baiknya tanpa terpaku pada hasil yang akan didapatkan. Kita hendaknya tidak termotivasi semata-mata oleh imbalan atau takut akan kegagalan, dan juga tidak boleh menjadi malas atau menghindari tindakan.\n",
+                "context": [
+                    {
+                        "label": "BG 2.47",
+                        "content": "\nBG 2.47\n\n*karmaṇy-evādhikāras te mā phaleṣhu kadāchana\nmā karma-phala-hetur bhūr mā te saṅgo 'stvakarmaṇi*\n\nEngkau hanya memiliki hak untuk bekerja, tetapi tidak untuk buahnya. Jangan terdorong oleh hasil kerjamu, pun jangan terikat pada kelambanan.\n",
+                        "link": None
+                    }
+                ],
+                "answer_system": "intent",
+                "suggestions": [
+                    "ceritakan tentang bab 2",
+                    "Bab 7 itu intinya tentang apa?",
+                    "Tolong berikan isi dari Bhagavad Gita bab 2 sloka 47.",
+                    "tunjukkan isi dari bab 6"
+                ],
+                "attachments": []
+            }
+        }
+
+
+class SuggestionsResponse(BaseModel):
+    """Response model for suggestions endpoint"""
+    suggestions: List[str]
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "suggestions": [
+                    "ceritakan tentang bab 2",
+                    "Bab 7 itu intinya tentang apa?",
+                    "Tolong berikan isi dari Bhagavad Gita bab 2 sloka 47.",
+                    "tunjukkan isi dari bab 6"
+                ]
+            }
+        }
 
 
 class PromptController(Controller):
     library_base_url = getenv("LIBRARY_BASE_URL") or "http://localhost:5173"
 
     def __init__(self):
-        self._router = APIRouter()
-        self._router.post("/prompt")(self.handle_prompt)
-        self._router.get("/suggestions")(self.handle_random_suggestions)
+        self._router = APIRouter(
+            prefix="",
+            tags=["AI Chat"],
+            responses={400: {"description": "Bad Request"}},
+        )
+        
+        self._router.post(
+            "/prompt",
+            response_model=PromptResponse,
+            summary="Ask AI about Bhagavad Gita",
+            description="Send a question or prompt about Bhagavad Gita to get an AI-generated response with relevant context, suggestions, and attachments.",
+            response_description="AI response with context and suggestions",
+            responses={
+                400: {
+                    "description": "Invalid request format",
+                    "model": dict
+                }
+            }
+        )(self.handle_prompt)
+        
+        self._router.get(
+            "/suggestions",
+            response_model=SuggestionsResponse,
+            summary="Get random question suggestions",
+            description="Get 4 random question suggestions that users can ask about Bhagavad Gita.",
+            response_description="List of 4 random question suggestions"
+        )(self.handle_random_suggestions)
+        
         self.console = Console()
 
     @property
-    def router(self):
+    def router(self) -> APIRouter:
         return self._router
 
     def get_random_suggestions(self) -> List[str]:
+        """
+        Generate random question suggestions for users.
+        
+        Returns:
+            List[str]: List of 4 random question suggestions
+        """
         suggestions = [
             # Kategori: get_specific_verse (Permintaan Sloka Spesifik)
             "Tolong berikan isi dari Bhagavad Gita bab 2 sloka 47.",  # Formal
@@ -100,9 +221,24 @@ class PromptController(Controller):
         return suggestions[:4]
 
     async def handle_random_suggestions(self):
+        """
+        Get random question suggestions for users.
+        
+        Returns:
+            SuggestionsResponse: List of 4 random question suggestions
+        """
         return {"suggestions": self.get_random_suggestions()}
 
     async def handle_prompt(self, request: PromptRequest):
+        """
+        Process user prompt and generate AI response.
+        
+        Args:
+            request (PromptRequest): User's question or prompt
+            
+        Returns:
+            PromptResponse: AI response with context, suggestions, and attachments
+        """
         chat_response = ChatResponse()
         chat_response.suggestions = self.get_random_suggestions()
 
