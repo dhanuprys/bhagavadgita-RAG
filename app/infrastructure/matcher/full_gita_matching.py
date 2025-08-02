@@ -121,6 +121,8 @@ JSON:
         if json_response["action"] == "unsupported_query":
             return None
 
+        print(json_response)
+
         return json_response
 
     def handle(

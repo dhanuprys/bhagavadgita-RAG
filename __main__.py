@@ -41,7 +41,7 @@ def main():
         gemini_keys,
     )
     llm_intent = GeminiLLM(
-        "gemini-2.0-flash-lite",
+        "gemma-3-1b-it",
         gemini_keys,
     )
 
