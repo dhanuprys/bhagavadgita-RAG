@@ -1,0 +1,159 @@
+# ===================================================================
+# Kategori 1: Pengambilan Fakta Sederhana (Jumlah Sloka & Nama Bab)
+# Menguji kemampuan RAG untuk menemukan data numerik dan nama yang eksplisit.
+# ===================================================================
+- question: "Ada berapa sloka pada bab 1?"
+  answer: "Bab 1 memiliki 47 sloka."
+
+- question: "Bab 2 memiliki berapa sloka?"
+  answer: "Bab 2 memiliki 72 sloka."
+
+- question: "Terdapat berapa sloka dalam bab 3?"
+  answer: "Bab 3 memiliki 43 sloka."
+
+- question: "Bab 4 memiliki berapa sloka?"
+  answer: "Bab 4 memiliki 42 sloka."
+
+- question: "Berapa banyak sloka pada bab 5?"
+  answer: "Bab 5 memiliki 29 sloka."
+
+- question: "Bab 6 memiliki berapa sloka?"
+  answer: "Bab 6 memiliki 47 sloka."
+
+- question: "Berapa sloka yang terdapat pada bab 7?"
+  answer: "Bab 7 memiliki 30 sloka."
+
+- question: "Bab 8 memiliki berapa sloka?"
+  answer: "Bab 8 memiliki 28 sloka."
+
+- question: "Terdapat berapa sloka dalam bab 9?"
+  answer: "Bab 9 memiliki 34 sloka."
+
+- question: "Bab 10 memiliki berapa sloka?"
+  answer: "Bab 10 memiliki 42 sloka."
+
+- question: "Berapa sloka pada bab 11?"
+  answer: "Bab 11 memiliki 55 sloka."
+
+- question: "Bab 12 memiliki berapa sloka?"
+  answer: "Bab 12 memiliki 20 sloka."
+
+- question: "Berapa banyak sloka pada bab 13?"
+  answer: "Bab 13 memiliki 35 sloka."
+
+- question: "Bab 14 memiliki berapa sloka?"
+  answer: "Bab 14 memiliki 27 sloka."
+
+- question: "Terdapat berapa sloka dalam bab 15?"
+  answer: "Bab 15 memiliki 20 sloka."
+
+- question: "Bab 16 memiliki berapa sloka?"
+  answer: "Bab 16 memiliki 24 sloka."
+
+- question: "Berapa banyak sloka pada bab 17?"
+  answer: "Bab 17 memiliki 28 sloka."
+
+- question: "Bab 18 memiliki berapa sloka?"
+  answer: "Bab 18 memiliki 78 sloka."
+
+- question: "Apa nama yoga dari bab 2?"
+  answer: "Nama Yoga pada bab 2 adalah Sānkhya Yog (Pengetahuan Transendental)."
+
+- question: "Apa nama Sansekerta dari Bab 10 dan berapa jumlah slokanya?"
+  answer: "Nama Sansekerta dari Bab 10 adalah 'Vibhūti Yog' dan memiliki 42 sloka."
+
+- question: "Apa nama Bab 1 dalam bahasa Hindi?"
+  answer: "Nama Bab 1 dalam bahasa Hindi adalah 'अर्जुनविषादयोग'."
+
+# ===================================================================
+# Kategori 2: Pengambilan Rangkuman & Konsep
+# Menguji kemampuan RAG untuk memahami dan meringkas informasi.
+# ===================================================================
+- question: "Tolong rangkum secara singkat isi dari Bab 1 Bhagavad Gita."
+  answer: "Bab 1, 'Dilema Arjuna' (Arjuna Viṣhād Yog), memperkenalkan latar belakang pertempuran Mahabharata dan menguraikan kesedihan serta keraguan Arjuna saat melihat kerabatnya di medan perang, yang membuatnya menyerah kepada Krishna untuk mencari solusi."
+
+- question: "Jelaskan apa itu Karma Yoga berdasarkan Bab 3."
+  answer: "Berdasarkan Bab 3, Karma Yoga adalah 'Jalan Pelayanan Tanpa Pamrih'. Ini menekankan pentingnya melakukan aktivitas tanpa terikat pada imbalan atau hasilnya demi mencapai pembebasan."
+
+- question: "Menurut Bab 4, mengapa Krishna bereinkarnasi dari waktu ke waktu?"
+  answer: "Menurut rangkuman Bab 4, Krishna bereinkarnasi dari waktu ke waktu untuk menegakkan kembali dharma (kebenaran) dan perdamaian di Bumi."
+
+- question: "Apa perbedaan antara 'sanyas' dan 'tyaag' menurut Bab 18?"
+  answer: "Menurut Bab 18, seorang 'sanyasi' adalah orang yang meninggalkan keluarga dan masyarakat, sedangkan seorang 'tyaagi' adalah orang yang melakukan tugasnya tanpa terikat pada hasil tindakannya dan mendedikasikannya kepada Tuhan."
+
+- question: "Bab mana yang membahas tentang tiga guna alam material?"
+  answer: "Bab 14, 'Yoga melalui Pemahaman Tiga Guna Alam Material', membahas tiga guna (mode) dari alam material – kebaikan, nafsu, dan kebodohan."
+
+- question: "Menurut Bab 7, apa itu Maya?"
+  answer: "Menurut Bab 7, Maya adalah energi ilusi Krishna di dunia material yang sangat sulit diatasi, tetapi mereka yang menyerahkan pikiran kepada-Nya akan dapat melampauinya."
+
+- question: "Apa yang diungkapkan Krishna dalam Bab 11, 'Yoga melalui Melihat Wujud Kosmis Tuhan'?"
+  answer: "Dalam Bab 11, atas permintaan Arjuna, Krishna menyingkapkan Wujud Kosmis Universal-Nya yang meliputi semua alam semesta. Arjuna dianugerahi penglihatan ilahi untuk dapat melihat keseluruhan ciptaan dalam tubuh Tuhan Tertinggi Krishna."
+
+- question: "Apa dua jenis sifat manusia yang dijelaskan dalam Bab 16?"
+  answer: "Bab 16 menjelaskan dua jenis sifat manusia, yaitu sifat ilahi (daivi) dan sifat setan (asuri)."
+
+# ===================================================================
+# Kategori 3: Pengambilan Detail Spesifik dari Sloka
+# Menguji kemampuan RAG untuk menemukan konten sloka, terjemahan, dan makna kata.
+# ===================================================================
+- question: "Bagaimana bunyi sloka bab 4 sloka 7?"
+  answer: "yadā yadā hi dharmasya glānir bhavati bhārata abhyutthānam adharmasya tadātmānaṁ sṛjāmy aham"
+
+- question: "Apa isi sloka bab 2 sloka 22?"
+  answer: "vāsānsi jīrṇāni yathā vihāya navāni gṛihṇāti naro ’parāṇi tathā śharīrāṇi vihāya jīrṇānyanyāni sanyāti navāni dehī"
+  
+- question: "Apa isi sloka bab 3 sloka 16?"
+  answer: "evaṁ pravartitaṁ chakraṁ nānuvartayatīha yaḥ aghāyur indriyārāmo moghaṁ pārtha sa jīvati"
+
+- question: "Apa isi sloka bab 5 sloka 3?"
+  answer: "jñeyaḥ sa nitya-sannyāsī yo na dveṣhṭi na kāṅkṣhati nirdvandvo hi mahā-bāho sukhaṁ bandhāt pramuchyate"
+
+- question: "Apa isi sloka bab 6 sloka 5?"
+  answer: "uddhared ātmanātmānaṁ nātmānam avasādayet ātmaiva hyātmano bandhur ātmaiva ripur ātmanaḥ"
+
+- question: "Apa isi sloka bab 7 sloka 19?"
+  answer: "bahūnāṁ janmanām ante jñānavān māṁ prapadyate vāsudevaḥ sarvam iti sa mahātmā su-durlabhaḥ"
+
+- question: "Apa isi sloka bab 8 sloka 5?"
+  answer: "anta-kāle cha mām eva smaran muktvā kalevaram yaḥ prayāti sa mad-bhāvaṁ yāti nāstyatra sanśhayaḥ"
+
+- question: "Apa isi sloka bab 9 sloka 22?"
+  answer: "ananyāśh chintayanto māṁ ye janāḥ paryupāsate teṣhāṁ nityābhiyuktānāṁ yoga-kṣhemaṁ vahāmyaham"
+
+- question: "Apa isi sloka bab 10 sloka 20?"
+  answer: "aham ātmā guḍākeśha sarva-bhūtāśhaya-sthitaḥ aham ādiśh cha madhyaṁ cha bhūtānām anta eva cha"
+
+- question: "Apa isi sloka bab 11 sloka 55?"
+  answer: "mat-karma-kṛin mat-paramo mad-bhaktaḥ saṅga-varjitaḥ nirvairaḥ sarva-bhūteṣhu yaḥ sa mām eti pāṇḍava"
+
+- question: "Apa isi sloka bab 12 sloka 13?"
+  answer: "adveṣhṭā sarva-bhūtānāṁ maitraḥ karuṇa eva cha nirmamo nirahankāraḥ sama-duḥkha-sukhaḥ kṣhamī"
+
+- question: "Apa terjemahan dari Bab 18, sloka 66?"
+  answer: "Terjemahan dari Bab 18, sloka 66 adalah: 'Meninggalkan semua Dharma sepenuhnya, carilah perlindungan pada-Ku saja. Aku akan membebaskanmu dari semua dosa; jangan berduka.'"
+
+- question: "Apa arti dari Bab 2, sloka 13?"
+  answer: "Arti dari Bab 2, sloka 13 adalah: 'Sama seperti diri yang berhubungan dengan tubuh melewati masa kanak-kanak, remaja, dan usia tua, demikian pula, saat mati, ia beralih ke tubuh lain. Orang bijak tidak tertipu oleh hal itu.'"
+
+- question: "Dalam sloka pertama Bab 1, apa arti dari 'dharma-kṣhetre kuru-kṣhetre'?"
+  answer: "Berdasarkan makna yang diberikan, 'dharma-kṣhetre' berarti 'tanah dharma' dan 'kuru-kṣhetre' berarti 'di Kurukshetra'."
+
+# ===================================================================
+# Kategori 4: Pertanyaan Negatif
+# Menguji kemampuan RAG untuk tidak mengarang jawaban jika data tidak ada.
+# ===================================================================
+- question: "Berapa lama perang Mahabharata berlangsung?"
+  answer: "Informasi mengenai total durasi perang Mahabharata tidak dijelaskan dalam data yang diberikan."
+
+- question: "Siapa nama istri Arjuna?"
+  answer: "Data yang diberikan tidak memuat informasi mengenai nama istri Arjuna."
+
+- question: "Siapa saja nama-nama Pandawa selain Arjuna?"
+  answer: "Informasi mengenai nama-nama Pandawa lainnya tidak dijelaskan secara lengkap dalam data yang diberikan."
+
+- question: "Apa senjata favorit Bhisma?"
+  answer: "Data yang diberikan tidak memuat informasi spesifik mengenai senjata favorit Bhisma."
+
+- question: "Bagaimana cara mempraktikkan meditasi menurut Bab 6 secara langkah demi langkah?"
+  answer: "Rangkuman Bab 6 menyebutkan bahwa Krishna mengungkapkan 'Yoga Meditasi' dan cara mempraktikkannya, namun detail langkah demi langkah tidak tersedia dalam konteks yang diberikan."
